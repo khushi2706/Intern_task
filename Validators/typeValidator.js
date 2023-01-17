@@ -1,16 +1,25 @@
-const isNumber = (data) => typeof data == "number"
+const isNumber = (data) => {
+  if (isNaN(data)) return false
+  if (data == Infinity) return false
 
-const isString = (data) => typeof data == "string"
+  return typeof Number(data) === "number"
+}
 
-const isObject = (data) => typeof data == "object"
+const isString = (data) => typeof data === "string"
 
-const isBool = (data) => typeof data == "boolean"
+const isObject = (data) => {
+  if (data == null) return false
+  if (isDate(data) || isArray(data)) return false
+  return typeof data === "object"
+}
 
-const isDate = (data) => data.constructor == Date
+const isBool = (data) => typeof data === "boolean"
 
-const isArray = (data) => data.constructor == Array
+const isDate = (data) => data.constructor === Date
 
-const isFun = (data) => typeof data == "function"
+const isArray = (data) => Array.isArray(data)
+
+const isFun = (data) => typeof data === "function"
 
 function CheckType(data, type) {
   switch (type.toLowerCase()) {
@@ -29,7 +38,7 @@ function CheckType(data, type) {
     case "function":
       return isFun(data)
     default:
-      return undefined
+      return typeof data === type
   }
 }
 
@@ -41,4 +50,10 @@ console.log(CheckType(328493492, "number"))
 console.log(CheckType(new Date(), "date"))
 console.log(CheckType(true, "boolean"))
 console.log(CheckType(CheckType, "function"))
+console.log("-------------")
+console.log(CheckType(NaN, "number"))
+console.log(CheckType(+Infinity, "number"))
+console.log(CheckType("123", "number"))
+console.log(CheckType(null, "object"))
+console.log(CheckType([], "object"))
 console.log("====================================")
