@@ -94,7 +94,9 @@ function saveFile() {
 
 function getMe(token) {
   const decode = jwt.verify(token, "thisissecretemsg")
-
+  console.log("====================================")
+  console.log(decode)
+  console.log("====================================")
   const user = users.filter((user) => user.email == decode._id)
   if (user.length == 0) {
     throw Error("UnAuthenticated !")
