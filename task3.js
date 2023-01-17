@@ -1,24 +1,24 @@
 // note: que 1
-{
-  let obj1 = { hair: "long", beard: true }
-  let obj2 = { beard: true, hair: "long" }
-  let obj3 = obj1
+// {
+//   let obj1 = { hair: "long", beard: true }
+//   let obj2 = { beard: true, hair: "long" }
+//   let obj3 = obj1
 
-  console.log(obj1 == obj2, obj1 == obj3)
-  console.log(obj1 === obj2, obj1 === obj3)
+//   console.log(obj1 == obj2, obj1 == obj3)
+//   console.log(obj1 === obj2, obj1 === obj3)
 
-  // convert into array and sort
-  obj1 = Object.entries(obj1)
-  obj2 = Object.entries(obj2)
+//   // convert into array and sort
+//   obj1 = Object.entries(obj1)
+//   obj2 = Object.entries(obj2)
 
-  obj1.sort()
-  obj2.sort()
-  // real way to compare
-  console.log(
-    JSON.stringify(obj1) == JSON.stringify(obj2)
-    // JSON.stringify(obj1) == JSON.stringify(obj3)
-  )
-}
+//   obj1.sort()
+//   obj2.sort()
+//   // real way to compare
+//   console.log(
+//     JSON.stringify(obj1) == JSON.stringify(obj2)
+//     // JSON.stringify(obj1) == JSON.stringify(obj3)
+//   )
+// }
 
 //console.log(_.isEqual(obj1, obj2));
 
@@ -97,20 +97,19 @@
 
 {
   //#Source https://bit.ly/2neWfJ2
-  const powerSet = (arr) => {
-    return arr.reduce(
-      (pv, cv) => {
-        let temp = pv
-        pv.forEach((ele) => {
-          temp.push([...ele, cv])
-        })
-        return temp
-      },
-      [[]]
-    )
-  }
-
-  console.log(powerSet([1, 2]))
+  // const powerSet = (arr) => {
+  //   return arr.reduce(
+  //     (pv, cv) => {
+  //       let temp = pv
+  //       pv.forEach((ele) => {
+  //         temp.push([...ele, cv])
+  //       })
+  //       return temp
+  //     },
+  //     [[]]
+  //   )
+  // }
+  // console.log(powerSet([1, 2]))
 }
 // note: que 5 Write a program to replace the names of multiple object keys.
 
@@ -146,11 +145,11 @@
 // note: que 7 Write a program that will return true if the string is y/yes or false if the string is n/no.
 
 {
-  // let yregx = /(y|yes)/i;
-  // let nregx = /(n|no)/i;
-  // const myFun = (val) =>
-  //   yregx.test(val) ? true : nregx.test(val) ? false : undefined;
-  // console.log(myFun("yes"));
+  let yregx = /^(y|yes)$/i
+  let nregx = /^(n|no)$/i
+  const myFun = (val) =>
+    yregx.test(val) ? true : nregx.test(val) ? false : undefined
+  console.log(myFun("yess"))
 }
 
 // note: que 8 ​ Write a program to get a sorted array of objects ordered by properties and orders.

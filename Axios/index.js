@@ -26,7 +26,7 @@ app.get("/users/:id", async (req, res) => {
   if (!numRegEx.test(id)) return res.status(400).send("Id should be Number")
 
   const data = await axios
-    .get(apiLink + id)
+    .get(`${apiLink}${id}`)
     .then((resp) => {
       return resp.data
     })
@@ -63,7 +63,7 @@ app.patch("/users/:id", async (req, res) => {
 
   const data = req.body
   let status
-  let resp = await axios.patch(apiLink + id, data).then(
+  let resp = await axios.patch(`${apiLink}${id}`, data).then(
     (response) => {
       status = response.status
       return response.data
@@ -83,7 +83,7 @@ app.delete("/users/:id", async (req, res) => {
   const numRegEx = /^\d*$/
   if (!numRegEx.test(id)) return res.status(400).send("Id should be Number")
 
-  let status = await axios.delete(apiLink + id).then(
+  let status = await axios.delete(`${apiLink}${id}`).then(
     (response) => {
       return response.status
     },
