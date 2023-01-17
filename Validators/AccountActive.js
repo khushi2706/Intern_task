@@ -22,8 +22,9 @@ const accountMaster = [
 function checkAccountId(id) {
   if (id < 1 || id > accountMaster.length - 1) return false
   for (const acc of accountMaster) {
+    console.log(acc)
     if (acc.accountId == id) {
-      return acc.isActive
+      return acc
     }
   }
 }

@@ -12,9 +12,7 @@ const featureAccess = {
 }
 
 function checkAccess(role, featureName) {
-  if (featureAccess[featureName]) return featureAccess[featureName][role]
-
-  return false
+  return featureAccess[featureName] && featureAccess[featureName][role]
 }
 
 console.log(checkAccess("client", "account"))
