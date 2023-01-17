@@ -9,7 +9,7 @@ const isString = (data) => typeof data === "string"
 
 const isObject = (data) => {
   if (data == null) return false
-  if (isDate(data) || isArray(data)) return false
+  if (data.constructor != Object) return false
   return typeof data === "object"
 }
 
