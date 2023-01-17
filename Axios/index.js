@@ -3,20 +3,36 @@ const express = require("express")
 
 const app = express()
 
+const apiLink = "https://reqres.in/api/users/"
+
 app.get("/users", async (req, res) => {
-  const data = await axios.get("https://reqres.in/api/users").then((resp) => {
-    return resp.data
-  })
+  const data = await axios
+    .get(apiLink)
+    .then((resp) => {
+      return resp.data
+    })
+    .catch((e) => {
+      console.log(e)
+      res.status(400).send(e)
+    })
   console.log(data)
   res.send(data.data)
 })
 
 app.get("/users/:id", async (req, res) => {
   const id = req.params.id
+
+  const numRegEx = /^\d*$/
+  if (!numRegEx.test(id)) return res.status(400).send("Id should be Number")
+
   const data = await axios
-    .get(`https://reqres.in/api/users/${id}`)
+    .get(apiLink + id)
     .then((resp) => {
       return resp.data
+    })
+    .catch((e) => {
+      console.log(e)
+      res.status(400).send(e)
     })
   console.log(data)
   res.send(data.data)
@@ -25,14 +41,14 @@ app.get("/users/:id", async (req, res) => {
 app.post("/users", async (req, res) => {
   const data = req.body
   let status
-  let resp = await axios.post("https://reqres.in/api/users", data).then(
+  let resp = await axios.post(apiLink, data).then(
     (response) => {
-      console.log(response.d)
       status = response.status
       return response.data
     },
     (error) => {
       console.log(error)
+      res.status(400).send(e)
     }
   )
   console.log(status, resp)
@@ -42,15 +58,19 @@ app.post("/users", async (req, res) => {
 
 app.patch("/users/:id", async (req, res) => {
   const id = req.params.id
+  const numRegEx = /^\d*$/
+  if (!numRegEx.test(id)) return res.status(400).send("Id should be Number")
+
   const data = req.body
   let status
-  let resp = await axios.patch(`https://reqres.in/api/users/${id}`, data).then(
+  let resp = await axios.patch(apiLink + id, data).then(
     (response) => {
       status = response.status
       return response.data
     },
     (error) => {
       console.log(error)
+      res.status(400).send(e)
     }
   )
   console.log(status, resp)
@@ -60,13 +80,16 @@ app.patch("/users/:id", async (req, res) => {
 
 app.delete("/users/:id", async (req, res) => {
   const id = req.params.id
+  const numRegEx = /^\d*$/
+  if (!numRegEx.test(id)) return res.status(400).send("Id should be Number")
 
-  let status = await axios.delete(`https://reqres.in/api/users/${id}`).then(
+  let status = await axios.delete(apiLink + id).then(
     (response) => {
       return response.status
     },
     (error) => {
       console.log(error)
+      res.status(400).send(e)
     }
   )
 
