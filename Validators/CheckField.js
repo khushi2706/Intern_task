@@ -26,8 +26,11 @@ function checkField(obj) {
     if (objSchema[key].require && obj[key] == undefined) {
       return false
     }
-    if (obj[key])
-      finalAns = finalAns && CheckType(obj[key], objSchema[key].type)
+    if (obj[key]) {
+      typeof objSchema[key] == "string"
+        ? (finalAns = finalAns && obj[key] == obj[key].trim())
+        : (finalAns = finalAns && CheckType(obj[key], objSchema[key].type))
+    }
   }
   return finalAns
 }

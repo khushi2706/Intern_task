@@ -62,8 +62,10 @@
 // arr.sort((p1, p2) => (p1 > p2 ? 1 : p1 < p2 ? -1 : 0));
 // console.log(arr);
 
-const obj = { name: "khushi" }
-obj.name = "khuhie"
+// const obj = { name: "khushi" }
+// obj.name = "khuhie"
 
-const age = 20
-age = 29
+// const age = 20
+// age = 29
+
+console.log(Date("11 - 12 - 2022"))
