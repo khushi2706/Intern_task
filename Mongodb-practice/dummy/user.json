@@ -1,0 +1,78 @@
+[
+  {
+    "_id": "6f313d41b4e543385b5d91ac",
+    "name": "Mr. Joshn",
+    "email": "Joshn@mail.com",
+    "password": "password",
+    "role": "owner",
+    "clientId": "6w9yh44sm91r2urtstkbh066lo1jhs7opgm6lqy7",
+    "ownerId": "6f313d41b4e543385b5d91ac",
+    "isActive": true,
+    "address": {
+      "city": "Ahemedabad",
+      "pincode": "903923"
+    },
+    "createdOn": {
+      "$date": {
+        "$numberLong": "1524300941000"
+      }
+    }
+  },
+  {
+    "_id": "6f313d41b4e543385b5d91ae",
+    "name": "Kevin Morl",
+    "email": "Morl@mail.com",
+    "password": "password",
+    "role": "client",
+    "clientId": "6w9yh44sm91r2urtstkbh066lo1jhs7opgm6lqy7",
+    "ownerId": "6f313d41b4e543385b5d91ac",
+    "isActive": true,
+    "address": {
+      "city": "Ahemedabad",
+      "pincode": "903923"
+    },
+    "createdOn": {
+      "$date": {
+        "$numberLong": "1624300941000"
+      }
+    }
+  },
+  {
+    "_id": "6f313d41b5e543385b5d92ae",
+    "name": "park Morl",
+    "email": "park@mail.com",
+    "password": "password",
+    "role": "client",
+    "clientId": "6w9yh44sm91r2urtstkbh066lo1jhs7opgm6lqy7",
+    "ownerId": "6f313d41b4e543385b5d91ac",
+    "isActive": true,
+    "address": {
+      "city": "Ahemedabad",
+      "pincode": "903923"
+    },
+    "createdOn": {
+      "$date": {
+        "$numberLong": "1624300941000"
+      }
+    }
+  },
+  {
+    "_id": "6f313d41b5e543385b5d93ae",
+    "name": "jueis",
+    "email": "jous@mail.com",
+    "password": "password",
+    "role": "client",
+    "clientId": "6w9yh44sm91r2urtstkbh066lo1jhs7opgm6lqy7",
+    "ownerId": "6f313d41b4e543385b5d91ac",
+    "isActive": true,
+    "address": {
+      "city": "Ahemedabad",
+      "pincode": "903923"
+    },
+    "createdOn": {
+      "$date": {
+        "$numberLong": "1634300941000"
+      }
+    }
+  }
+]

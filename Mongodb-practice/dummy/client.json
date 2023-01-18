@@ -1,0 +1,32 @@
+[
+  {
+    "_id": "5f313d41b4e543385b5d91ac",
+    "clientId": "6w9yh44sm91r2urtstkbh066lo1jhs7opgm6lqy7",
+    "autoApprove": 0,
+    "createdOn": "2015-07-03T08:55:41.000Z",
+    "appDesc": "Wordpress",
+    "appWeb": "http://socialpilot.co",
+    "secret": "00z2vqwnkgy2g592talb2szr9myvdx3dx2fstbgg",
+    "name": "Wordpress"
+  },
+  {
+    "_id": "5f313d41b4e543385b5d91ad",
+    "clientId": "6w9yh44sm91r2urtstkbh066lo1jhs7opgm6lqy8",
+    "autoApprove": 1,
+    "createdOn": "2018-04-21T08:55:41.000Z",
+    "appDesc": "google",
+    "appWeb": "http://socialpilot.co",
+    "secret": "00z2vqwnkgy2g592talb2szr9myvdx3dx2fstbgf",
+    "name": "Google"
+  },
+  {
+    "_id": "5f313d41b4e543385b5d91a3",
+    "clientId": "6w9yh44sm91r2urtstkbh066lo1jhs7opgm6lqy9",
+    "autoApprove": 0,
+    "createdOn": "2022-07-03T08:55:41.000Z",
+    "appDesc": "FaceBook",
+    "appWeb": "http://socialpilot.co",
+    "secret": "00z2vqwnkgy2g592talb2szr9myvdx3dx2fstbge",
+    "name": "FaceBook"
+  }
+]

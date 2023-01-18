@@ -1,0 +1,41 @@
+[
+  {
+    "_id": "6f313d41b4e543385b5d94ac",
+    "accountName": "FaceBook",
+    "isActive": true,
+    "accountId": 1,
+    "accessToken": "6w9yh44sm91r2urtstkbh066lo1jhs7opgm6lqy7",
+
+    "profileUniqueId": "76w9yh44sm91r2urtst",
+    "isDeleted": false,
+    "loginId": "e49876w9yh44sm91r2ur31t",
+    "ownerId": "6f313d41b4e543385b5d91ac",
+    "userID": ["6f313d41b4e543385b5d91ae"]
+  },
+  {
+    "_id": "6f313d41b4e543385b5d92ac",
+    "accountName": "LinkedIn",
+    "isActive": true,
+    "accountId": 1,
+    "accessToken": "6w9yh44sm91r2urtstkbh066lo1jhs7opgm6lqy7",
+
+    "profileUniqueId": "76w9yh44sm91r2urtst",
+    "isDeleted": false,
+    "loginId": "e49876w9yh44sm91r2ur32t",
+    "ownerId": "6f313d41b4e543385b5d91ac",
+    "userID": ["6f313d41b5e543385b5d93ae"]
+  },
+  {
+    "_id": "6f313d41b4e543385b5d93ac",
+    "accountName": "Pintrest",
+    "isActive": true,
+    "accountId": 1,
+    "accessToken": "6w9yh44sm91r2urtstkbh066lo1jhs7opgm6lqy7",
+
+    "profileUniqueId": "76w9yh44sm91r2urtst",
+    "isDeleted": false,
+    "loginId": "e49876w9yh44sm91r2ur35t",
+    "ownerId": "6f313d41b4e543385b5d91ac",
+    "userID": ["6f313d41b5e543385b5d93ae", "6f313d41b5e543385b5d92ae"]
+  }
+]
