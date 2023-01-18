@@ -24,6 +24,12 @@ const userSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "Client",
   },
+  ownerId: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+    require: true,
+    default: "",
+  },
   isActive: {
     type: Boolean,
     require: true,
@@ -31,6 +37,7 @@ const userSchema = new Schema({
   adreess: {
     city: {
       type: String,
+      require: true,
     },
     pincode: {
       type: String,

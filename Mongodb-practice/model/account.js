@@ -11,9 +11,8 @@ const accountSchema = new Schema({
     type: Boolean,
     require: true,
   },
-
   accountId: {
-    type: String,
+    type: String, //ex. 0 -> facebook
     require: true,
   },
   accessToken: {
@@ -34,11 +33,17 @@ const accountSchema = new Schema({
     require: true,
     unique: true,
   },
-
-  userId: {
+  ownerId: {
     type: Schema.Types.ObjectId,
     ref: "User",
-  }, // which user has login to this account (not sure about)
+    require: true,
+  },
+  userId: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+    },
+  ], // which user has login to this account (not sure about)
 })
 
 accountSchema.set("timestamps", true)
