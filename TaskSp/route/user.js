@@ -9,7 +9,7 @@ const {
 const router = new KoaRouter({ prefix: "/user" })
 
 router.post("/signup", addUser)
-router.post("/signup/:userType/:ownerId", addUser)
+router.post("/signup/:encrypt", addUser)
 router.post("/login", loginUser)
 router.post("/invite", inviteUser)
 

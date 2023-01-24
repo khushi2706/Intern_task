@@ -13,20 +13,13 @@ const addNewGroup = async (ctx) => {
   const Decrypt = jwt.verify(jwtToken, Secret)
 
   if (Decrypt.userType != "owner") {
-    ctx.status = 400
-    ctx.body = "Unauthorized!"
-    return
+    return sendResponse(ctx, 401, { success: false, msg: "Anauthorized !" })
   }
 
   const group = { title, decs, listOfMember }
 
   if (!VerifyGroup(group)) {
-    ctx.status = 400
-    ctx.body = {
-      success: false,
-      messgage: "Please add Valid Data",
-    }
-    return
+    return sendResponse(ctx, 401, { success: false, msg: "Enter valid Data!" })
   }
 
   try {
@@ -40,8 +33,7 @@ const addNewGroup = async (ctx) => {
     }
     return
   } catch (error) {
-    ctx.status = 400
-    ctx.body = { success: false, error }
+    return sendResponse(ctx, 401, { success: false, error })
   }
 }
 
@@ -50,23 +42,15 @@ const viewAllGroup = async (ctx) => {
   const Decrypt = jwt.verify(jwtToken, Secret)
 
   if (Decrypt.userType != "owner") {
-    ctx.status = 400
-    ctx.body = "Unauthorized!"
-    return
+    return sendResponse(ctx, 401, { success: false, msg: "Anauthorized !" })
   }
   try {
     const Group = db.getDB().collection("group")
     const groups = await Group.find({}).toArray()
 
-    ctx.status = 200
-    ctx.body = {
-      success: true,
-      groups,
-    }
-    return
+    return sendResponse(ctx, 200, { success: true, groups })
   } catch (error) {
-    ctx.status = 400
-    ctx.body = { success: false, error }
+    return sendResponse(ctx, 401, { success: false, error })
   }
 }
 
@@ -83,23 +67,12 @@ const viewGroup = async (ctx) => {
     const group = await Group.findOne({ _id: new ObjectID(groupId) })
 
     if (userType != "owner" && !group.listOfMember.includes(userId)) {
-      ctx.status = 400
-      ctx.body = {
-        success: false,
-        messgage: "You're not authenticated !",
-      }
-      return
+      return sendResponse(ctx, 400, { success: false, msg: "Anauthorized !" })
     }
 
-    ctx.status = 200
-    ctx.body = {
-      success: true,
-      group,
-    }
-    return
+    return sendResponse(ctx, 200, { success: true, group })
   } catch (error) {
-    ctx.status = 400
-    ctx.body = { success: false, error }
+    return sendResponse(ctx, 400, { success: false, error })
   }
 }
 
