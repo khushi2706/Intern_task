@@ -20,29 +20,6 @@ const userSchema = new Schema({
     require: true,
     enum: ["team", "admin", "owner"],
   },
-  clientId: {
-    type: Schema.Types.ObjectId,
-    ref: "Client",
-  },
-  ownerId: {
-    type: Schema.Types.ObjectId,
-    ref: "User",
-    require: true,
-    default: "",
-  },
-  isActive: {
-    type: Boolean,
-    require: true,
-  },
-  adreess: {
-    city: {
-      type: String,
-      require: true,
-    },
-    pincode: {
-      type: String,
-    },
-  },
 })
 
 userSchema.set("timestamps", true)

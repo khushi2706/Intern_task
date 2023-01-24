@@ -56,6 +56,10 @@ app.post("/users", async (req, res) => {
   res.status(status).send(resp)
 })
 
+app.post("/query", async (req, res) => {
+  const data = req.body
+})
+
 app.patch("/users/:id", async (req, res) => {
   const id = req.params.id
   const numRegEx = /^\d*$/
