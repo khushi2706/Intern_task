@@ -11,6 +11,10 @@ const groupSchema = {
     type: "array",
     require: true,
   },
+  ownerId: {
+    type: "string",
+    require: true,
+  },
 }
 const { CheckType } = require("./typeValidator")
 

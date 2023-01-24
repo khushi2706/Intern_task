@@ -14,21 +14,18 @@ const addUser = async (ctx) => {
   let { name, email, password } = ctx.request.body
 
   email = email.trim()
-  const decrypt = jwt.verify(ctx.params.encrypt, Secret)
-  let userType = decrypt.userType
-  const ownerId = decrypt.ownerId
+
+  let userType, ownerId
+  if (ctx.params.encrypt) {
+    const decrypt = jwt.verify(ctx.params.encrypt, Secret)
+    userType = decrypt.userType
+    ownerId = decrypt.ownerId
+  }
 
   const User = await db.getDB().collection("users")
 
-  const count = await User.find({ email: email }).count()
-
   let user
-  if (count != 0) {
-    return sendResponse(ctx, 400, {
-      success: false,
-      msg: "User already exits!",
-    })
-  }
+
   try {
     if (ownerId) {
       const owner = await User.findOne({ _id: new ObjectID(ownerId) })
@@ -46,7 +43,9 @@ const addUser = async (ctx) => {
       user = { name, email, password, userType, invitedUser: [] }
     }
 
-    if (!VerifyUser(user)) {
+    const isValid = await VerifyUser(user)
+    console.log(isValid)
+    if (!isValid) {
       return sendResponse(ctx, 400, {
         success: false,
         msg: "User credentiatl is not proper formated!",

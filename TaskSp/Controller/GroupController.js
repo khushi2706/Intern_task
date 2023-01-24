@@ -4,6 +4,7 @@ const db = require("../config/config")
 const VerifyGroup = require("../validator/groupValidator")
 const { ObjectID } = require("bson")
 const Secret = "thisIsSecretMessage!"
+const { sendResponse } = require("../utills/sendResponse")
 
 const addNewGroup = async (ctx) => {
   const { title, decs, listOfMember } = ctx.request.body
@@ -12,16 +13,20 @@ const addNewGroup = async (ctx) => {
 
   const Decrypt = jwt.verify(jwtToken, Secret)
 
+  const ownerId = Decrypt.id
   if (Decrypt.userType != "owner") {
     return sendResponse(ctx, 401, { success: false, msg: "Anauthorized !" })
   }
 
-  const group = { title, decs, listOfMember }
-
-  if (!VerifyGroup(group)) {
+  const group = { title, decs, listOfMember, ownerId }
+  console.log("sending to veify ")
+  const isValid = await VerifyGroup(group)
+  console.log("====================================")
+  console.log(isValid)
+  console.log("====================================")
+  if (!isValid) {
     return sendResponse(ctx, 401, { success: false, msg: "Enter valid Data!" })
   }
-
   try {
     const Group = db.getDB().collection("group")
     Group.insert(group)
@@ -46,7 +51,7 @@ const viewAllGroup = async (ctx) => {
   }
   try {
     const Group = db.getDB().collection("group")
-    const groups = await Group.find({}).toArray()
+    const groups = await Group.find({ ownerId: Decrypt.id }).toArray()
 
     return sendResponse(ctx, 200, { success: true, groups })
   } catch (error) {
