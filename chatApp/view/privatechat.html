@@ -84,8 +84,8 @@
     </section>
     <script src="/socket.io/socket.io.js"></script>
     <script>
-      const getTime = () => {
-        let date = new Date()
+      const getTime = (date = new Date()) => {
+        
         let options = { hour: "numeric", minute: "numeric", hour12: true }
         let time = date.toLocaleString("en-US", options)
         options = { month: "long", day: "numeric" }
@@ -137,10 +137,9 @@
         }
       }
 
-      socket.on("message", ({ message, from, time }) => {
-        console.log("recived msg")
-        console.log(time)
-        renderMsg(message, from, time)
+      socket.on("message", ({ message, from }) => {
+       
+        renderMsg(message, from, getTime())
         document.getElementById("messages").scrollTop = 10000
       })
 
