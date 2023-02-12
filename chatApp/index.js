@@ -29,6 +29,7 @@ app.use(bodyParser()).use(router.routes()).use(router.allowedMethods())
 
 io.on("connection", (socket) => {
   socket.on("joined", async ({ username, room, time }) => {
+    socket.username = username
     socket.join(room)
     let msg = { message: `${username} has joined`, from: "system", time }
 
@@ -75,7 +76,9 @@ io.on("connection", (socket) => {
     socket.in(room).emit("message", { message, from, time })
   })
 
-  socket.on("disconnect", () => {})
+  socket.on("disconnect", () => {
+    let username = socket.username
+  })
 })
 
 router.get("/chat", async (ctx) => {
