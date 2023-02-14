@@ -1,55 +1,54 @@
 const db = require("../config/mongoDb")
 const Verifyblog = require("../validator/blogValidator")
 const { sendResponse } = require("../utills/sendResponse")
-const { verify } = require("jsonwebtoken")
 const jwt = require("jsonwebtoken")
 const { BSON } = require("mongodb")
 const Secret = "thisIsSecretMessage!"
+const {
+  findBlog,
+  insertBlog,
+  updateBlog,
+  deleteBlog,
+} = require("../Model/Blog")
 
 const addBlog = async (ctx) => {
-  let { title, desc, owenerId } = ctx.request.body
-  const jwtToken = ctx.header.authtoken
-  const Decrypt = jwt.verify(jwtToken, Secret)
+  let { title, desc, ownerId } = ctx.request.body
+  const id = ctx.state.id
   const blog = {
     title,
     desc,
-    writenBy: Decrypt.id,
-    owenerId,
+    writenBy: id,
+    ownerId,
     Liked: [],
-    comments: [],
   }
 
-  if (!Decrypt.id)
-    return sendResponse(ctx, 400, { success: false, msg: "Unauthorized!" })
   let checkValid = await Verifyblog(blog)
   if (!checkValid.isValid) {
     return sendResponse(ctx, 400, { success: false, msg: checkValid.message })
   }
-  const Blog = await db.getDB().collection("blogs")
-  await Blog.insertOne(blog)
+  await insertBlog(blog)
   return sendResponse(ctx, 200, { success: true, msg: "added successfully !" })
 }
 
 const viewBlog = async (ctx) => {
   const { id } = ctx.params
   try {
-    const Blog = await db.getDB().collection("blogs")
+    const Blog = db.getDB().collection("blogs")
     let data
-    if (id) data = await Blog.findOne({ _id: new BSON.ObjectId(id) })
-    else data = await Blog.find().toArray()
+    if (id) data = await findBlog({ _id: new BSON.ObjectId(id) })
+    else data = await findBlog()
     return sendResponse(ctx, 200, { success: true, data })
   } catch (error) {
-    return sendResponse(ctx, 400, { success: false, error })
+    return sendResponse(ctx, 400, { success: false, e: error.message })
   }
 }
 
 const likeBlog = async (ctx) => {
   const { id } = ctx.params
-  const Blog = await db.getDB().collection("blogs")
 
   const userid = ctx.state.id
   try {
-    await Blog.updateOne(
+    await updateBlog(
       { _id: new BSON.ObjectId(id) },
       { $addToSet: { Liked: userid } }
     )
@@ -62,27 +61,24 @@ const likeBlog = async (ctx) => {
   })
 }
 
-const updateBlog = async (ctx) => {
+const updateBlogCon = async (ctx) => {
   const { blogId, title, desc } = ctx.request.body
 
-  const Blog = await db.getDB().collection("blogs")
   let obj = new Map()
   if (title) obj.set("title", title) //
 
   if (desc) obj.set("desc", desc) //
-  await Blog.updateOne({ _id: new BSON.ObjectId(blogId) }, { $set: obj })
+  await updateBlog({ _id: new BSON.ObjectId(blogId) }, { $set: obj })
   return sendResponse(ctx, 200, {
     success: true,
     message: "updated Successfully!",
   })
 }
 
-const deleteBlog = async (ctx) => {
+const deleteBlogCon = async (ctx) => {
   const { blogId } = ctx.request.body
 
-  const Blog = await db.getDB().collection("blogs")
-
-  await Blog.deleteOne({ _id: new BSON.ObjectId(blogId) })
+  await deleteBlog({ _id: new BSON.ObjectId(blogId) })
   return sendResponse(ctx, 200, {
     success: true,
     message: "deleted Successfully!",
@@ -110,7 +106,17 @@ const addNewComment = async (ctx) => {
     message: "comment added Successfully!",
   })
 }
-
+const getCommentByBlog = async (ctx) => {
+  const { blogId } = ctx.params
+  try {
+    const Comment = db.getDB().collection("comments")
+    const comments = await Comment.find({ blogId }).toArray()
+    sendResponse(ctx, 200, { success: true, comments })
+  } catch (error) {
+    console.log(error)
+    sendResponse(ctx, 400, { success: false, message: error.message })
+  }
+}
 const deleteComment = async (ctx) => {
   const { commentId } = ctx.request.body
   const userId = ctx.state.id
@@ -132,8 +138,9 @@ module.exports = {
   addBlog,
   viewBlog,
   likeBlog,
-  updateBlog,
-  deleteBlog,
+  updateBlogCon,
+  deleteBlogCon,
   addNewComment,
   deleteComment,
+  getCommentByBlog,
 }

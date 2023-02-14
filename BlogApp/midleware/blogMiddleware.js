@@ -1,65 +1,80 @@
 const db = require("../config/mongoDb")
-const Verifyblog = require("../validator/blogValidator")
 const { sendResponse } = require("../utills/sendResponse")
-const { verify } = require("jsonwebtoken")
-const jwt = require("jsonwebtoken")
 const { BSON } = require("mongodb")
-const Secret = "thisIsSecretMessage!"
+const { countBlog } = require("../Model/Blog")
 
 const addBlogMid = async (ctx, next) => {
   try {
-    const jwtToken = ctx.header.authtoken
-    const Decrypt = jwt.verify(jwtToken, Secret)
-    ctx.state.myID = Decrypt.id
-    const id = Decrypt.id
-    const { owenerId } = ctx.request.body
-    if (Decrypt.userType == "cs") {
-      const cs = User.findOne({
-        $and: [{ _id: new BSON.ObjectId(id) }, { "type.ownerId": owenerId }],
-      })
+    const { id, ownerId, userType } = ctx.state
+    if (userType == "cs") {
+      const cs = await db
+        .getDB()
+        .collection("users")
+        .aggregate([
+          { $match: { _id: new BSON.ObjectId(id) } },
+          {
+            $project: {
+              ownerDetails: {
+                $filter: {
+                  input: "$ownerDetails",
+                  as: "od",
+                  cond: { $eq: ["$$od.ownerId", ownerId] },
+                },
+              },
+            },
+          },
+        ])
+        .toArray()
+      if (cs && !cs[0].ownerDetails[0].access)
+        return sendResponse(ctx, 400, { success: false, msg: "Unauthorized!" })
     }
 
     return await next()
   } catch (e) {
+    console.log(e)
     return sendResponse(ctx, 400, e)
   }
 }
 
-const updateBlogMid = async (ctx, next) => {
-  try {
-    const jwtToken = ctx.header.authtoken
-    const Decrypt = jwt.verify(jwtToken, Secret)
-    const myId = Decrypt.id
-    const { blogId } = ctx.request.body
-    const Blog = await db.getDB().collection("blogs")
-    const asCheck = Blog.countDocuments({
-      _id: new BSON.ObjectId(blogId),
-      writenBy: myId,
-    })
+const CheckCredential =
+  (...arg) =>
+  async (ctx, next) => {
+    try {
+      const { blogId } = ctx.request.body
+      const { id, ownerId, userType } = ctx.state
+      // check if blog is written by themself or not
+      let asCheck = await countBlog({
+        _id: new BSON.ObjectId(blogId),
+        writenBy: id,
+      })
 
-    if (Decrypt.userType == "owner" || asCheck) return await next()
+      let userArr = []
 
-    return sendResponse(ctx, 400, "anAuthrized!")
-  } catch (error) {
-    return sendResponse(ctx, 400, error)
+      let dict = {
+        o: "owner",
+        a: "admin",
+        m: "manager",
+      }
+      for (c of arg) userArr.push(dict[c])
+
+      console.log(userArr.includes(userType))
+      // if not then we check that userType nd ownerId
+      if (userArr.includes(userType))
+        asCheck = await countBlog({
+          _id: new BSON.ObjectId(blogId),
+          ownerId,
+        })
+
+      if (asCheck) return await next()
+
+      return sendResponse(ctx, 400, "unAuthrized!")
+    } catch (error) {
+      console.log(error)
+      return sendResponse(ctx, 400, error.message)
+    }
   }
-}
 
-const checkLogin = async (ctx, next) => {
-  try {
-    const jwtToken = ctx.header.authtoken
-    const Decrypt = jwt.verify(jwtToken, Secret)
-    ctx.state.id = Decrypt.id
-    ctx.state.userType = Decrypt.userType
-    if (Decrypt.userType == "owner" || Decrypt.userType == "admin")
-      return await next()
-  } catch (error) {
-    console.log(error)
-    return sendResponse(ctx, 400, error)
-  }
-}
 module.exports = {
   addBlogMid,
-  updateBlogMid,
-  checkLogin,
+  CheckCredential,
 }

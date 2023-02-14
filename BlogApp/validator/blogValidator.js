@@ -7,13 +7,12 @@ const blogSchema = {
   desc: {
     type: "string",
     require: true,
-    unique: true,
   },
   writenBy: {
     type: "string",
     require: true,
   },
-  owenerId: {
+  ownerId: {
     type: "string",
     require: true,
   },

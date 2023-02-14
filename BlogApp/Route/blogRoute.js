@@ -1,25 +1,27 @@
-const Koa = require("koa")
 const KoaRouter = require("koa-router")
-
 const blogRouter = new KoaRouter({ prefix: "/blog" })
-
-const { updateBlogMid, checkLogin } = require("../midleware/blogMiddleware")
+const { addBlogMid, CheckCredential } = require("../midleware/blogMiddleware")
+const { checkLogin } = require("../midleware/authMiddleware.js")
+const compose = require("koa-compose")
 const {
   addBlog,
   viewBlog,
   likeBlog,
-  updateBlog,
-  deleteBlog,
+  updateBlogCon,
+  deleteBlogCon,
   addNewComment,
   deleteComment,
+  getCommentByBlog,
 } = require("../controllers/blogController")
 
-blogRouter.post("/addNew", addBlog)
+const middlewareUD = compose([checkLogin, CheckCredential("o", "m", "a")])
+blogRouter.post("/addNew", checkLogin, addBlogMid, addBlog)
 blogRouter.get("/view", viewBlog)
 blogRouter.get("/view/:id", viewBlog)
 blogRouter.get("/like/:id", checkLogin, likeBlog)
-blogRouter.patch("/update", updateBlogMid, updateBlog)
-blogRouter.delete("/delete", updateBlogMid, deleteBlog)
+blogRouter.patch("/update", middlewareUD, updateBlogCon)
+blogRouter.delete("/delete", middlewareUD, deleteBlogCon)
 blogRouter.post("/comment", checkLogin, addNewComment)
 blogRouter.delete("/deleteComment", checkLogin, deleteComment)
+blogRouter.get("/getComment/:blogId", getCommentByBlog)
 module.exports = blogRouter
