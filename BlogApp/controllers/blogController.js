@@ -1,5 +1,4 @@
 const db = require("../config/mongoDb")
-const Verifyblog = require("../validator/blogValidator")
 const { sendResponse } = require("../utills/sendResponse")
 const jwt = require("jsonwebtoken")
 const { BSON } = require("mongodb")
@@ -12,28 +11,21 @@ const {
 } = require("../Model/Blog")
 
 const addBlog = async (ctx) => {
-  let { title, desc, ownerId } = ctx.request.body
-  const id = ctx.state.id
-  const blog = {
-    title,
-    desc,
-    writenBy: id,
-    ownerId,
-    Liked: [],
+  const blog = ctx.state.blog
+  try {
+    await insertBlog(blog)
+    return sendResponse(ctx, 200, {
+      success: true,
+      msg: "added successfully !",
+    })
+  } catch (error) {
+    return sendResponse(ctx, 400, { success: false, msg: error.message })
   }
-
-  let checkValid = await Verifyblog(blog)
-  if (!checkValid.isValid) {
-    return sendResponse(ctx, 400, { success: false, msg: checkValid.message })
-  }
-  await insertBlog(blog)
-  return sendResponse(ctx, 200, { success: true, msg: "added successfully !" })
 }
 
 const viewBlog = async (ctx) => {
   const { id } = ctx.params
   try {
-    const Blog = db.getDB().collection("blogs")
     let data
     if (id) data = await findBlog({ _id: new BSON.ObjectId(id) })
     else data = await findBlog()

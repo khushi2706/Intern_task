@@ -1,34 +1,23 @@
 const jwt = require("jsonwebtoken")
 const bcrypt = require("bcrypt")
-const db = require("../config/mongoDb")
-const VerifyUser = require("../validator/userValidator")
 const Secret = "thisIsSecretMessage!"
 const { sendEmail } = require("../utills/sendEmail")
 const { BSON } = require("mongodb")
 const { sendResponse } = require("../utills/sendResponse")
 const { signUpUsingLinkUser } = require("../utills/getUserForSignUp")
 const { insertInvUser, deleteInvUser } = require("../Model/InvitedUser")
-const {
-  insertUser,
-  findUser,
-  countUser,
-  updateUser,
-  deleteUser,
-} = require("../Model/User")
+const { insertUser, findUser, countUser, updateUser } = require("../Model/User")
 
 const addUser = async (ctx) => {
   let jwtToken
   let userType, ownerId
-  let { name, email, password } = ctx.request.body
-
-  let user = { name, email, password }
+  const user = ctx.state.user
   try {
     if (ctx.params.encrypt) {
       //if param is there then we will create diffrent user
       const decrypt = jwt.verify(ctx.params.encrypt, Secret)
       userType = decrypt.userType
       ownerId = decrypt.ownerId
-
       try {
         await signUpUsingLinkUser(user, ownerId, userType)
       } catch (error) {
@@ -38,20 +27,13 @@ const addUser = async (ctx) => {
       userType = "owner"
       user.userType = userType
     }
-    // validating user object before adding to db
-    const isValidObj = await VerifyUser(user)
-    console.log(isValidObj)
-    if (!isValidObj.isValid) {
-      return sendResponse(ctx, 400, { success: false, msg: isValidObj.message })
-    }
 
     // hashing the password
-    const hashPass = await bcrypt.hash(password, 8)
+    const hashPass = await bcrypt.hash(user.password, 8)
     user.password = hashPass
-
     const us = await insertUser(user)
-
     const id = us._id
+    const email = user.email
     // create jwtToken
     jwtToken = jwt.sign({ id, email, userType, ownerId }, Secret)
   } catch (error) {

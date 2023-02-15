@@ -13,9 +13,10 @@ const {
   deleteComment,
   getCommentByBlog,
 } = require("../controllers/blogController")
+const { validateBlog } = require("../midleware/validareBlog")
 
 const middlewareUD = compose([checkLogin, CheckCredential("o", "m", "a")])
-blogRouter.post("/addNew", checkLogin, addBlogMid, addBlog)
+blogRouter.post("/addNew", checkLogin, addBlogMid, validateBlog, addBlog)
 blogRouter.get("/view", viewBlog)
 blogRouter.get("/view/:id", viewBlog)
 blogRouter.get("/like/:id", checkLogin, likeBlog)

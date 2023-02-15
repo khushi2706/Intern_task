@@ -1,6 +1,7 @@
 const KoaRouter = require("koa-router")
 const userRouter = new KoaRouter({ prefix: "/user" })
 const { CheckCredential } = require("../midleware/userMiddleware")
+const { validateUser } = require("../midleware/validateUser")
 const {
   addUser,
   loginUser,
@@ -14,7 +15,7 @@ const {
   updateAccess,
 } = require("../controllers/roleController")
 const { checkLogin } = require("../midleware/authMiddleware")
-userRouter.post("/signUp", addUser)
+userRouter.post("/signUp", validateUser, addUser)
 userRouter.post("/signup/:encrypt", addUser)
 userRouter.post("/login", loginUser)
 userRouter.patch("/profile", checkLogin, updateProfile)
