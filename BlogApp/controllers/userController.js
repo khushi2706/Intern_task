@@ -18,11 +18,8 @@ const addUser = async (ctx) => {
       const decrypt = jwt.verify(ctx.params.encrypt, Secret)
       userType = decrypt.userType
       ownerId = decrypt.ownerId
-      try {
-        await signUpUsingLinkUser(user, ownerId, userType)
-      } catch (error) {
-        return sendResponse(ctx, 400, error.message)
-      }
+
+      await signUpUsingLinkUser(user, ownerId, userType)
     } else {
       userType = "owner"
       user.userType = userType
@@ -33,9 +30,8 @@ const addUser = async (ctx) => {
     user.password = hashPass
     const us = await insertUser(user)
     const id = us._id
-    const email = user.email
     // create jwtToken
-    jwtToken = jwt.sign({ id, email, userType, ownerId }, Secret)
+    jwtToken = jwt.sign({ id, userType, ownerId }, Secret)
   } catch (error) {
     console.log(error)
     return sendResponse(ctx, 401, { success: false, msg: error.message })

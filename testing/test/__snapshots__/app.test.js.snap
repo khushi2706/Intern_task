@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`get Endpoints get hi 1`] = `
+{
+  "msg": "Hi",
+}
+`;
+
+exports[`get Endpoints post data 1`] = `
+{
+  "success": true,
+}
+`;
