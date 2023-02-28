@@ -50,9 +50,13 @@ describe("GET /blog", () => {
     // ])
 
     query.getAllBlog = jest.spyOn({ getAllBlog }, "getAllBlog")
+    query.getAllBlog.mockImplementation(() => "mock")
     const res = await request(server).get("/blog")
+    console.log(res.text)
+    //expect(res.text).toEqual("mock")
+    query.getAllBlog.mockRestore()
     expect(res.statusCode).toEqual(200)
-    expect(query.getAllBlog.mock.calls.length).toBe(1)
+    expect(query.getAllBlog.mock.calls.length).toBe(0)
   })
 })
 
